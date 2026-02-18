@@ -1,25 +1,65 @@
-*.log
-.DS_Store
+# Dependencies
+/vendor/
+/node_modules/
+
+# Environment
 .env
-.env.backup
-.env.production
-.phpactor.json
-.php-cs-fixer.cache
+.env.local
+.env.*.local
 .phpunit.result.cache
-/.fleet
-/.idea
-/.nova
-/.phpunit.cache
-/.vscode
-/.zed
-/auth.json
-/public/storage
-/public/vendor
-/database/testing.sqlite
-/storage/*.key
-/storage/pail
-storage/station/pids/*.pid
-/vendor
-Homestead.json
-Homestead.yaml
+
+# IDE
+/.idea/
+/.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
 Thumbs.db
+
+# Build artifacts
+/dist/
+/build/
+/public/hot
+/public/storage
+/storage/*.key
+/public/vendor
+
+# Laravel
+bootstrap/cache/*
+!bootstrap/cache/.gitkeep
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Testing
+/coverage/
+.phpunit.cache/
+coverage.xml
+clover.xml
+
+# Package development
+composer.lock
+package-lock.json
+
+# PHPStan
+phpstan.neon.local
+
+# PHP CS Fixer
+.php-cs-fixer.cache
+
+# Temporary files
+*.tmp
+*.temp
+
+# Claude
+.claude/
+CLAUDE.md
+
+# Storage
+storage/station/pids/*.pid
