@@ -1,0 +1,23 @@
+services:
+  example:
+    container_name: station_example
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    ports:
+      - "8001:8001"
+    volumes:
+      - .:/var/www/html
+      - ./docker/php.ini:/usr/local/etc/php/conf.d/custom.ini
+    working_dir: /var/www/html
+    environment:
+      - APP_ENV=local
+      - XDEBUG_MODE=off
+    command: php artisan serve --host=0.0.0.0 --port=8001
+    networks:
+      - station
+
+networks:
+  station:
+    name: station_station
+    external: true

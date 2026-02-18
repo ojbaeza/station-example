@@ -1,0 +1,24 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+
+parameters:
+    paths:
+        - app
+    excludePaths:
+        - app/Models/User.php
+    level: 8
+    ignoreErrors:
+        # Missing array key/value type specifications (action return types)
+        - identifier: missingType.iterableValue
+
+        # Defensive null-coalescing on array offsets that PHPStan considers always-present
+        - identifier: nullCoalesce.offset
+
+        # Template type resolution on collect() with loosely-typed pagination data
+        - identifier: argument.templateType
+
+        # WorkflowDefinition casts steps to array, but PHPStan sees string
+        -
+            message: '#Argument of an invalid type string supplied for foreach#'
+            path: app/Providers/AppServiceProvider.php
+    reportUnmatchedIgnoredErrors: false
