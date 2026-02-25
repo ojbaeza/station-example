@@ -129,13 +129,8 @@ class ListStationWorkflowsTest extends TestCase
             ->assertJsonPath('pagination.last_page', 2);
     }
 
-    public function testListStationWorkflowsConnectionFilterReturnsGracefullyOnSqlite(): void
+    public function testListStationWorkflowsConnectionFilterWorksAcrossDrivers(): void
     {
-        // The ListStationWorkflows action uses JSON_UNQUOTE(JSON_EXTRACT(...))
-        // which is MySQL-specific. On SQLite, this function doesn't exist and
-        // the query fails. The action's try/catch returns an empty error response.
-        // This test documents that behavior: the connection filter silently fails
-        // on SQLite. On MySQL, it would correctly filter by connection.
         DB::table('station_workflows')->delete();
 
         DB::table('station_workflows')->insert([
@@ -155,17 +150,15 @@ class ListStationWorkflowsTest extends TestCase
 
         $response = $this->getJson('/api/station/workflows?connection=redis');
 
-        // On SQLite: JSON_UNQUOTE doesn't exist, so the action catches the
-        // error and returns an empty response with error message.
-        // On MySQL: this would return 1 filtered workflow.
         $response->assertStatus(200)
-            ->assertJsonStructure(['workflows', 'pagination']);
+            ->assertJsonStructure(['workflows', 'pagination'])
+            ->assertJsonCount(1, 'workflows')
+            ->assertJsonPath('workflows.0.connection', 'redis');
 
-        $isSqlite = config('database.default') === 'sqlite';
-        if ($isSqlite) {
-            // On SQLite, the JSON_UNQUOTE filter fails silently
-            $this->assertArrayHasKey('error', $response->json());
-        }
+        // Non-matching connection should return empty
+        $response = $this->getJson('/api/station/workflows?connection=sqs');
+        $response->assertStatus(200)
+            ->assertJsonCount(0, 'workflows');
     }
 
     public function testListStationWorkflowsWithNegativePageDefaultsToOne(): void

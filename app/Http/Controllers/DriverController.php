@@ -18,7 +18,7 @@ class DriverController extends Controller
             return response()->json([
                 'drivers' => [],
                 'default' => config('queue.default', 'sync'),
-                'error' => $e->getMessage(),
+                'error' => $this->safeErrorMessage($e),
             ]);
         }
     }

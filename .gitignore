@@ -44,7 +44,6 @@ coverage.xml
 clover.xml
 
 # Package development
-composer.lock
 package-lock.json
 
 # PHPStan

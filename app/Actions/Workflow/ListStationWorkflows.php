@@ -21,7 +21,7 @@ class ListStationWorkflows
         }
 
         if ($connection) {
-            $query->whereRaw("JSON_UNQUOTE(JSON_EXTRACT(context, '$.connection')) = ?", [$connection]);
+            $query->where('context->connection', $connection);
         }
 
         $total = (clone $query)->count();

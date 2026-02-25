@@ -37,7 +37,7 @@ class WorkflowController extends Controller
         } catch (Throwable $e) {
             return response()->json([
                 'success' => false,
-                'error' => $e->getMessage(),
+                'error' => $this->safeErrorMessage($e),
             ], 500);
         }
     }
@@ -54,7 +54,7 @@ class WorkflowController extends Controller
             return response()->json([
                 'workflows' => [],
                 'pagination' => ['current_page' => 1, 'last_page' => 1, 'total' => 0, 'per_page' => 10],
-                'error' => $e->getMessage(),
+                'error' => $this->safeErrorMessage($e),
             ]);
         }
     }
@@ -66,7 +66,7 @@ class WorkflowController extends Controller
         } catch (Throwable $e) {
             return response()->json([
                 'success' => false,
-                'error' => $e->getMessage(),
+                'error' => $this->safeErrorMessage($e),
             ], 500);
         }
     }
@@ -78,7 +78,7 @@ class WorkflowController extends Controller
 
             return response()->json(['success' => true]);
         } catch (Throwable $e) {
-            return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
+            return response()->json(['success' => false, 'error' => $this->safeErrorMessage($e)], 500);
         }
     }
 }

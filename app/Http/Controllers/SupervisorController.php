@@ -31,7 +31,7 @@ class SupervisorController extends Controller
         } catch (Throwable $e) {
             return response()->json([
                 'success' => false,
-                'error' => $e->getMessage(),
+                'error' => $this->safeErrorMessage($e),
             ], 500);
         }
     }
@@ -43,7 +43,7 @@ class SupervisorController extends Controller
         } catch (Throwable $e) {
             return response()->json([
                 'success' => false,
-                'error' => $e->getMessage(),
+                'error' => $this->safeErrorMessage($e),
             ], 500);
         }
     }
@@ -55,7 +55,7 @@ class SupervisorController extends Controller
         } catch (Throwable $e) {
             return response()->json([
                 'success' => false,
-                'error' => $e->getMessage(),
+                'error' => $this->safeErrorMessage($e),
             ]);
         }
     }

@@ -64,7 +64,7 @@ Route::get('/queue/pause-status', [QueueController::class, 'pauseStatus']);
 
 // Failed jobs routes
 Route::get('/failed-jobs', [FailedJobController::class, 'index']);
-Route::post('/failed-jobs/{uuid}/retry', [FailedJobController::class, 'retry']);
 Route::post('/failed-jobs/retry-all', [FailedJobController::class, 'retryAll']);
+Route::post('/failed-jobs/{uuid}/retry', [FailedJobController::class, 'retry']);
 Route::delete('/failed-jobs/{uuid}', [FailedJobController::class, 'destroy']);
 Route::delete('/failed-jobs', [FailedJobController::class, 'flush']);

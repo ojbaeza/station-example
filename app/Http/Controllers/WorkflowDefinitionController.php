@@ -10,6 +10,7 @@ use App\Actions\Workflow\ListWorkflowDefinitions;
 use App\Actions\Workflow\RunWorkflowDefinition;
 use App\Actions\Workflow\UpdateWorkflowDefinition;
 use App\Models\WorkflowDefinition;
+use App\Rules\ValidJobClass;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Throwable;
@@ -30,13 +31,13 @@ class WorkflowDefinitionController extends Controller
             'connection' => 'nullable|string|max:100',
             'steps' => 'required|array|min:1',
             'steps.*.name' => 'required|string|max:255',
-            'steps.*.job_class' => 'nullable|string|max:500',
+            'steps.*.job_class' => ['nullable', 'string', 'max:500', new ValidJobClass()],
             'steps.*.dependencies' => 'nullable|array',
             'steps.*.dependencies.*' => 'string',
             'steps.*.parallel' => 'nullable|boolean',
             'steps.*.jobs' => 'nullable|array',
             'steps.*.jobs.*.name' => 'required_with:steps.*.parallel|string|max:255',
-            'steps.*.jobs.*.job_class' => 'nullable|string|max:500',
+            'steps.*.jobs.*.job_class' => ['nullable', 'string', 'max:500', new ValidJobClass()],
         ]);
 
         $result = $action->handle($validated);
@@ -63,13 +64,13 @@ class WorkflowDefinitionController extends Controller
             'connection' => 'nullable|string|max:100',
             'steps' => 'required|array|min:1',
             'steps.*.name' => 'required|string|max:255',
-            'steps.*.job_class' => 'nullable|string|max:500',
+            'steps.*.job_class' => ['nullable', 'string', 'max:500', new ValidJobClass()],
             'steps.*.dependencies' => 'nullable|array',
             'steps.*.dependencies.*' => 'string',
             'steps.*.parallel' => 'nullable|boolean',
             'steps.*.jobs' => 'nullable|array',
             'steps.*.jobs.*.name' => 'required_with:steps.*.parallel|string|max:255',
-            'steps.*.jobs.*.job_class' => 'nullable|string|max:500',
+            'steps.*.jobs.*.job_class' => ['nullable', 'string', 'max:500', new ValidJobClass()],
         ]);
 
         $result = $action->handle($name, $validated);
@@ -111,7 +112,7 @@ class WorkflowDefinitionController extends Controller
         } catch (Throwable $e) {
             return response()->json([
                 'success' => false,
-                'error' => $e->getMessage(),
+                'error' => $this->safeErrorMessage($e),
             ], 500);
         }
     }

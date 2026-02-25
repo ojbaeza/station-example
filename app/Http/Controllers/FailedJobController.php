@@ -24,7 +24,7 @@ class FailedJobController extends Controller
         } catch (Throwable $e) {
             return response()->json([
                 'success' => false,
-                'error' => $e->getMessage(),
+                'error' => $this->safeErrorMessage($e),
                 'failed_jobs' => [],
                 'count' => 0,
                 'pagination' => ['current_page' => 1, 'last_page' => 1, 'total' => 0, 'per_page' => 10],
@@ -39,7 +39,7 @@ class FailedJobController extends Controller
         } catch (Throwable $e) {
             return response()->json([
                 'success' => false,
-                'error' => $e->getMessage(),
+                'error' => $this->safeErrorMessage($e),
             ], 500);
         }
     }
@@ -51,7 +51,7 @@ class FailedJobController extends Controller
         } catch (Throwable $e) {
             return response()->json([
                 'success' => false,
-                'error' => $e->getMessage(),
+                'error' => $this->safeErrorMessage($e),
             ], 500);
         }
     }
@@ -68,7 +68,7 @@ class FailedJobController extends Controller
         } catch (Throwable $e) {
             return response()->json([
                 'success' => false,
-                'error' => $e->getMessage(),
+                'error' => $this->safeErrorMessage($e),
             ], 500);
         }
     }
@@ -80,7 +80,7 @@ class FailedJobController extends Controller
         } catch (Throwable $e) {
             return response()->json([
                 'success' => false,
-                'error' => $e->getMessage(),
+                'error' => $this->safeErrorMessage($e),
             ], 500);
         }
     }

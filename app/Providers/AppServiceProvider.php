@@ -6,6 +6,7 @@ namespace App\Providers;
 
 use App\Jobs\WorkflowStepJob;
 use App\Models\WorkflowDefinition;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\ServiceProvider;
 use Station\Facades\Workflow;
 use Throwable;
@@ -42,9 +43,16 @@ class AppServiceProvider extends ServiceProvider
             ->addStep('load', WorkflowStepJob::class, ['transform'])
             ->timeout(600);
 
-        // Load custom definitions from DB
+        // Load custom definitions from DB (cached to avoid per-request queries)
+        $this->loadWorkflowDefinitionsFromDatabase();
+    }
+
+    private function loadWorkflowDefinitionsFromDatabase(): void
+    {
         try {
-            foreach (WorkflowDefinition::all() as $def) {
+            $definitions = Cache::remember('workflow_definitions', 60, static fn () => WorkflowDefinition::all());
+
+            foreach ($definitions as $def) {
                 $wf = Workflow::define($def->name)
                     ->description($def->description ?? '')
                     ->timeout($def->timeout)

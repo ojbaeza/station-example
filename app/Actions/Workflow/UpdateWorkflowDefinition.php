@@ -6,6 +6,7 @@ namespace App\Actions\Workflow;
 
 use App\Jobs\WorkflowStepJob;
 use App\Models\WorkflowDefinition;
+use Illuminate\Support\Facades\Cache;
 use Station\Workflows\WorkflowManager;
 
 class UpdateWorkflowDefinition
@@ -22,7 +23,15 @@ class UpdateWorkflowDefinition
             return null;
         }
 
-        $definition->update($data);
+        Cache::forget('workflow_definitions');
+
+        $definition->update([
+            'name' => $data['name'],
+            'description' => $data['description'] ?? null,
+            'steps' => $data['steps'],
+            'timeout' => $data['timeout'],
+            'connection' => $data['connection'] ?? null,
+        ]);
 
         $wf = $this->workflowManager->define($data['name'])
             ->description($data['description'] ?? '')

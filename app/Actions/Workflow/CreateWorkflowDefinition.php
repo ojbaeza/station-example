@@ -6,12 +6,15 @@ namespace App\Actions\Workflow;
 
 use App\Jobs\WorkflowStepJob;
 use App\Models\WorkflowDefinition;
+use Illuminate\Support\Facades\Cache;
 use Station\Facades\Workflow;
 
 class CreateWorkflowDefinition
 {
     public function handle(array $data): array
     {
+        Cache::forget('workflow_definitions');
+
         $definition = WorkflowDefinition::create([
             'name' => $data['name'],
             'description' => $data['description'] ?? null,

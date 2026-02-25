@@ -34,7 +34,7 @@ class WorkerController extends Controller
         } catch (Throwable $e) {
             return response()->json([
                 'success' => false,
-                'error' => $e->getMessage(),
+                'error' => $this->safeErrorMessage($e),
             ], 500);
         }
     }
@@ -49,7 +49,7 @@ class WorkerController extends Controller
         } catch (Throwable $e) {
             return response()->json([
                 'success' => false,
-                'error' => $e->getMessage(),
+                'error' => $this->safeErrorMessage($e),
             ], 500);
         }
     }
@@ -67,7 +67,7 @@ class WorkerController extends Controller
         } catch (Throwable $e) {
             return response()->json([
                 'success' => false,
-                'error' => $e->getMessage(),
+                'error' => $this->safeErrorMessage($e),
             ], 500);
         }
     }
@@ -85,7 +85,7 @@ class WorkerController extends Controller
         } catch (Throwable $e) {
             return response()->json([
                 'success' => false,
-                'error' => $e->getMessage(),
+                'error' => $this->safeErrorMessage($e),
             ], 500);
         }
     }
@@ -98,7 +98,7 @@ class WorkerController extends Controller
             return response()->json([
                 'workers' => [],
                 'default' => config('queue.default', 'sync'),
-                'error' => $e->getMessage(),
+                'error' => $this->safeErrorMessage($e),
             ]);
         }
     }

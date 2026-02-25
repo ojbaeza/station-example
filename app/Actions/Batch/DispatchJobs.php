@@ -26,15 +26,17 @@ class DispatchJobs
         Cache::put("batch:{$batchId}:queue", $queue, now()->addHours(24));
         Cache::put("batch:{$batchId}:started_at", now()->toIso8601String(), now()->addHours(24));
 
-        $activeBatches = Cache::get('active_batches', []);
-        $activeBatches[$batchId] = [
-            'id' => $batchId,
-            'driver' => $driver,
-            'queue' => $queue,
-            'total' => $count,
-            'started_at' => now()->toIso8601String(),
-        ];
-        Cache::put('active_batches', $activeBatches, now()->addHours(24));
+        Cache::lock('active_batches_lock', 5)->block(3, static function () use ($batchId, $driver, $queue, $count): void {
+            $activeBatches = Cache::get('active_batches', []);
+            $activeBatches[$batchId] = [
+                'id' => $batchId,
+                'driver' => $driver,
+                'queue' => $queue,
+                'total' => $count,
+                'started_at' => now()->toIso8601String(),
+            ];
+            Cache::put('active_batches', $activeBatches, now()->addHours(24));
+        });
 
         $chunkSize = 1000;
         for ($i = 0; $i < $count; $i += $chunkSize) {

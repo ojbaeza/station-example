@@ -21,6 +21,9 @@ return Application::configure(basePath: dirname(__DIR__))
             'worker/*',
             'api/station/*',
             'supervisor/*',
+            'queue/*',
+            'failed-jobs',
+            'failed-jobs/*',
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
