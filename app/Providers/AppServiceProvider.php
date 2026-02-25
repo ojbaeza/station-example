@@ -50,7 +50,7 @@ class AppServiceProvider extends ServiceProvider
     private function loadWorkflowDefinitionsFromDatabase(): void
     {
         try {
-            $definitions = Cache::remember('workflow_definitions', 60, static fn () => WorkflowDefinition::all());
+            $definitions = Cache::remember('workflow_definitions', 60, static fn() => WorkflowDefinition::all());
 
             foreach ($definitions as $def) {
                 $wf = Workflow::define($def->name)
